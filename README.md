@@ -2,12 +2,17 @@
 
 Learn from:
 
-- https://github.com/adeeb10abbas/ros2-docker-dev
-- https://github.com/2b-t/docker-for-robotics
+- Main docker setup: https://github.com/adeeb10abbas/ros2-docker-dev
+- Extra learning: https://github.com/2b-t/docker-for-robotics
 
-Test:
+Knowledge:
 
-- https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim.html
+- Basic concepts: https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim.html
+- Robot simulation: https://docs.ros.org/en/jazzy/Tutorials/Advanced/Simulators/Gazebo/Gazebo.html#
+
+Extra:
+
+- ROS 2 workshop: https://ros2-industrial-workshop.readthedocs.io/en/latest/index.html
 
 # Run
 
@@ -41,3 +46,4 @@ ros2
 ```
 rviz2
 ```
+
