@@ -26,7 +26,6 @@ docker compose -f docker/docker-compose.yml up -d
 
 ```
 docker exec -it test-ros2-docker /bin/bash
-
 ```
 
 - Inside the container
