@@ -27,9 +27,9 @@ RUN colcon mixin add default \
   colcon metadata update
 
 # install desktop variants, which extends on ros-base, which extends on our base image ros-core
-# https://snapcraft.io/ros-jazzy-desktop
+# https://snapcraft.io/ros-humble-desktop
 RUN apt-get update && apt-get install --no-install-recommends -y \
-  ros-jazzy-desktop \
+  ros-humble-desktop \
   && rm -rf /var/lib/apt/lists/*
 
 # Set the entrypoint to source ROS setup.bash and run a bash shell
