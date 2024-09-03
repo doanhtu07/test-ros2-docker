@@ -1,5 +1,5 @@
 # Use the official ROS image as the base image
-FROM ros:jazzy-ros-core
+FROM ros:humble-ros-core
 
 # Set shell for running commands
 SHELL ["/bin/bash", "-c"]
