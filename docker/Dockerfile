@@ -8,6 +8,8 @@ SHELL ["/bin/bash", "-c"]
 RUN apt-get update && apt-get install --no-install-recommends -y \
   build-essential \
   git \
+  vim \
+  net-tools \
   python3-colcon-common-extensions \
   python3-colcon-mixin \
   python3-rosdep \
@@ -31,6 +33,12 @@ RUN colcon mixin add default \
 RUN apt-get update && apt-get install --no-install-recommends -y \
   ros-humble-desktop \
   && rm -rf /var/lib/apt/lists/*
+
+COPY ./build-scripts/*.sh /build-scripts/
+
+# prepare the environment
+RUN chmod +x /build-scripts/prepare.sh
+RUN /build-scripts/prepare.sh 
 
 # Set the entrypoint to source ROS setup.bash and run a bash shell
 CMD ["/bin/bash"]
