@@ -1,0 +1,140 @@
+# Guide: https://hlfshell.ai/posts/repeatable-ros-environments/
+# Install ROS 2: https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html
+# Example file for Ubuntu desktop: https://gist.github.com/niw/bed28f823b4ebd2c504285ff99c1b2c2
+
+# VMWare guide for Vagrant: https://medium.com/@lubomir-tobek/vagrant-with-vmware-fusion-c4d6b737e621
+# VMWare Utility guide: https://developer.hashicorp.com/vagrant/docs/providers/vmware/vagrant-vmware-utility
+# VMWare Fusion guide 2: https://gist.github.com/manojkarthick/518ceb4569156ce2c95329b71f676bf0
+
+# Vagrantfile for Ubuntu 22.04 with 30GB memory and bridged network
+Vagrant.configure("2") do |config|
+  # Specify the Ubuntu 22.04 base box
+  config.vm.box = "bento/ubuntu-22.04" # Ubuntu 22.04 (Jammy Jellyfish)
+
+  # VM settings
+  config.vm.provider "vmware_desktop" do |vb|
+    vb.memory = 16384  # Set memory to 16 GB (16384 MB)
+    vb.cpus = 4        # Optional: You can configure CPU cores as needed
+  end
+
+  # Bridged network configuration
+  config.vm.network "public_network" # bridge: "en0: Wi-Fi" # Adjust bridge interface as needed
+
+  # Optionally, set a static IP if needed (optional)
+  # config.vm.network "public_network", ip: "192.168.1.100"
+
+  # Currently "ubuntu/bionic64" on VirtualBox requires `type: "virtualbox"`
+  # to make synced folder works.
+  # config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+
+  # Additional settings (e.g., provisioning)
+
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "==========================================\n"
+    echo "Initial OS + Ubuntu Desktop Setup\n"
+    echo "==========================================\n\n"
+
+    apt-get update
+    apt-get install -y --no-install-recommends ubuntu-desktop
+    apt-get install -y --no-install-recommends open-vm-tools open-vm-tools-desktop
+
+    # Add `vagrant` to Administrator
+    sudo usermod -a -G sudo vagrant
+  SHELL
+
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "\n\n"
+    echo "==========================================\n"
+    echo "Installing ROS Humble\n"
+    echo "==========================================\n\n"
+
+    echo "\n\n"
+    echo "-------------\n"
+    echo "Locale Setup\n"
+    echo "-------------\n\n"
+
+    apt-get update
+    apt-get install -y --no-install-recommends locales
+    locale-gen en_US en_US.UTF-8
+    update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+    export LANG=en_US.UTF-8
+
+    echo "\n\n"
+    echo "-------------\n"
+    echo "Add Additional Repositories\n"
+    echo "-------------\n\n"
+
+    apt-get update
+    apt-get install -y --no-install-recommends software-properties-common
+    add-apt-repository universe
+
+    apt-get update
+    apt-get install -y --no-install-recommends curl
+    curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+
+    # Finally, refresh the package lists:
+    # Recommended as ROS2 is tied tightly to ubuntu releases apparently
+    apt-get update
+    apt-get upgrade
+
+    echo "\n\n"
+    echo "-------------\n"
+    echo "Install ROS2\n"
+    echo "-------------\n\n"
+
+    apt-get update
+    apt-get install -y --no-install-recommends ros-humble-desktop # Includes rviz + demos
+
+    echo "\n\n"
+    echo "-------------\n"
+    echo "Source ROS\n"
+    echo "-------------\n\n"
+
+    echo 'source /opt/ros/humble/setup.bash' >> /home/vagrant/.bashrc
+  SHELL
+
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "\n\n"
+    echo "==========================================\n"
+    echo "Installing other tools\n"
+    echo "==========================================\n\n"
+
+    # https://stackoverflow.com/questions/47408174/vagrant-provision-dpkg-preconfigure-unable-to-re-open-stdin
+    echo 'export DEBIAN_FRONTEND=noninteractive' >> /home/vagrant/.bashrc
+    export DEBIAN_FRONTEND=noninteractive
+
+    apt-get update
+    apt-get install -y --no-install-recommends python3-argcomplete python3-colcon-common-extensions python3-colcon-mixin python3-vcstool python3-rosdep
+    apt-get install -y --no-install-recommends build-essential git vim wget
+    apt-get install -y --no-install-recommends gnome-tweaks
+
+    # clean up
+    rm -rf /var/lib/apt/lists/*
+  SHELL
+
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "\n\n"
+    echo "==========================================\n"
+    echo "Enable bidirectional clipboard\n"
+    echo "==========================================\n\n"
+
+    # https://askubuntu.com/questions/1421163/ubuntu-22-04-guest-additions-cd-shared-clipboard-shared-folder-do-not-work
+    # apt-get install -y --no-install-recommends linux-headers-$(uname -r)
+    # mkdir -p /mnt/cdrom
+    # mount /dev/cdrom /mnt/cdrom
+    # /mnt/cdrom/VBoxLinuxAdditions.run
+
+    sudo reboot
+  SHELL
+
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "\n\n"
+    echo "==========================================\n"
+    echo "Restart\n"
+    echo "==========================================\n\n"
+
+    sudo shutdown -r now
+  SHELL
+end

@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   git \
   vim \
   net-tools \
+  wget \
   python3-colcon-common-extensions \
   python3-colcon-mixin \
   python3-rosdep \
