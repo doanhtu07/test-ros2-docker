@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./prepare.sh
+
 # Discovery server manual: https://turtlebot.github.io/turtlebot4-user-manual/setup/discovery_server.html
 
 # Base IP (first three octets)
@@ -27,6 +29,9 @@ for ((i=start; i<=end; i++)); do
         finalInput="${finalInput}a\n" # add more
     fi
 done
+
+# Clean up previous configurations
+sudo rm -rf /etc/turtlebot4_discovery/
 
 printf "$finalInput" | bash <(wget -qO - https://raw.githubusercontent.com/turtlebot/turtlebot4_setup/humble/turtlebot4_discovery/configure_discovery.sh)
 

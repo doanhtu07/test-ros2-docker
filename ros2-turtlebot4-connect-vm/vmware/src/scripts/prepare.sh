@@ -2,7 +2,7 @@
 
 search_strings=(
   "source /opt/ros/humble/setup.bash"
-  "export DEBIAN_FRONTEND=noninteractive"
+  "export DEBIAN_FRONTEND=noninteractive" # https://stackoverflow.com/questions/47408174/vagrant-provision-dpkg-preconfigure-unable-to-re-open-stdin
 )
 
 file_paths=(
@@ -23,3 +23,5 @@ for ((i=0; i<${#file_paths[@]}; i++)); do
         echo "$search_string" >> "$file"
     fi
 done
+
+source /home/vagrant/.bashrc
