@@ -13,19 +13,16 @@ Vagrant.configure("2") do |config|
 
   # VM settings
   config.vm.provider "vmware_desktop" do |vb|
+    # vb.gui = true
     vb.memory = 16384  # Set memory to 16 GB (16384 MB)
     vb.cpus = 4        # Optional: You can configure CPU cores as needed
   end
 
   # Bridged network configuration
-  config.vm.network "public_network" # bridge: "en0: Wi-Fi" # Adjust bridge interface as needed
+  config.vm.network "public_network", bridge: "" # Adjust bridge interface as needed
 
-  # Optionally, set a static IP if needed (optional)
-  # config.vm.network "public_network", ip: "192.168.1.100"
-
-  # Currently "ubuntu/bionic64" on VirtualBox requires `type: "virtualbox"`
-  # to make synced folder works.
-  # config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+  # Optional: sync a custom folder
+  config.vm.synced_folder "./src/", "/home/vagrant/src/"
 
   # Additional settings (e.g., provisioning)
 
@@ -86,13 +83,6 @@ Vagrant.configure("2") do |config|
 
     apt-get update
     apt-get install -y --no-install-recommends ros-humble-desktop # Includes rviz + demos
-
-    echo "\n\n"
-    echo "-------------\n"
-    echo "Source ROS\n"
-    echo "-------------\n\n"
-
-    echo 'source /opt/ros/humble/setup.bash' >> /home/vagrant/.bashrc
   SHELL
 
   config.vm.provision "shell", inline: <<-SHELL
@@ -117,24 +107,10 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     echo "\n\n"
     echo "==========================================\n"
-    echo "Enable bidirectional clipboard\n"
+    echo "Run some custom scripts\n"
     echo "==========================================\n\n"
 
-    # https://askubuntu.com/questions/1421163/ubuntu-22-04-guest-additions-cd-shared-clipboard-shared-folder-do-not-work
-    # apt-get install -y --no-install-recommends linux-headers-$(uname -r)
-    # mkdir -p /mnt/cdrom
-    # mount /dev/cdrom /mnt/cdrom
-    # /mnt/cdrom/VBoxLinuxAdditions.run
-
-    sudo reboot
-  SHELL
-
-  config.vm.provision "shell", inline: <<-SHELL
-    echo "\n\n"
-    echo "==========================================\n"
-    echo "Restart\n"
-    echo "==========================================\n\n"
-
-    sudo shutdown -r now
+    source /home/vagrant/src/build-scripts/prepare.sh
+    source /home/vagrant/src/setup-scripts/setup-turtlebot4.sh
   SHELL
 end
