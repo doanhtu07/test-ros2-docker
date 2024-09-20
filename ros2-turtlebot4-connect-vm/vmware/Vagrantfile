@@ -19,8 +19,8 @@ Vagrant.configure("2") do |config|
   end
 
   # Bridged network configuration
-  # config.vm.network "public_network", bridge: "en0: Wi-Fi (AirPort)"
-  config.vm.network "public_network", bridge: "en0" # Adjust bridge interface as needed
+  # config.vm.network "public_network", bridge: "en0: Wi-Fi (AirPort)" # Adjust bridge interface as needed
+  config.vm.network "public_network"
 
   # Optional: sync a custom folder
   config.vm.synced_folder "./src/", "/home/vagrant/src/"
