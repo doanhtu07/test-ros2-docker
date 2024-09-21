@@ -84,6 +84,7 @@ Vagrant.configure("2") do |config|
 
     apt-get update
     apt-get install -y --no-install-recommends ros-humble-desktop # Includes rviz + demos
+    apt-get install -y --no-install-recommends ros-humble-turtlebot4-desktop
   SHELL
 
   config.vm.provision "shell", inline: <<-SHELL
