@@ -1,0 +1,1 @@
+Any files inside `/src` folder can be synced into the Docker container

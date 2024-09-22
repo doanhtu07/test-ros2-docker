@@ -1,48 +1,15 @@
-# Test ROS 2 with Docker
+# Test ROS 2 with Docker and Virtual Machines
 
-Learn from:
+Welcome to my playground of ROS 2
 
-- Main docker setup: https://github.com/adeeb10abbas/ros2-docker-dev
-- Extra learning: https://github.com/2b-t/docker-for-robotics
+Here I play with Docker and Virtual Machines (including VMWare and VirtualBox)
 
-Knowledge:
+I'll show you how to setup for both Docker and VMs
 
-- Basic concepts: https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim.html
-- Robot simulation: https://docs.ros.org/en/jazzy/Tutorials/Advanced/Simulators/Gazebo/Gazebo.html#
+## Docker
 
-Extra:
+Head to [/docker/README.md](./docker/README.md)
 
-- ROS 2 workshop: https://ros2-industrial-workshop.readthedocs.io/en/latest/index.html
+## VMs
 
-# Run
-
-- Create + run docker containers in the background
-
-```
-docker compose -f docker/docker-compose.yml up -d
-```
-
-- Run docker service
-
-```
-docker exec -it test-ros2-docker /bin/bash
-```
-
-- Inside the container
-
-```
-source ros_entrypoint.sh
-```
-
-- Test ROS 2
-
-```
-ros2
-```
-
-- Test Rviz 2. Use localhost:8080 on host to view through noVNC
-
-```
-rviz2
-```
-
+Head to [/virtual-machines/README.md](./virtual-machines/README.md)

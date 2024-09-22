@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     image: test-ros2-docker-image # For now, the names are the same. Can change if ever a need arises.
     volumes:
-      - ../src/:/ros2_ws/src/
+      - ./src/:/ros2_ws/src/
     environment:
       - DISPLAY=novnc:0.0
     depends_on:
@@ -26,18 +26,6 @@ services:
     networks:
       - x11
     restart: on-failure
-
-  ros_turtlebot4_connect:
-    container_name: ros_turtlebot4_connect
-    network_mode: host
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: test-ros2-docker-image
-    volumes:
-      - ../src/:/ros2_ws/src/
-    stdin_open: true
-    tty: true
 
 networks:
   x11:
